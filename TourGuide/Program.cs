@@ -1,3 +1,4 @@
+using ApplicationLayer.Helper;
 using InfrastructureLayer.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.Extentions;
@@ -10,6 +11,7 @@ internal class Program
 
         ApplicationServicesExtentions.AddApplicationServices(builder.Services, builder.Configuration);
         IdentityServicesExtention.AddIdentityServices(builder.Services, builder.Configuration);
+        builder.Services.AddHttpContextAccessor();
 
         var app = builder.Build();
 
@@ -19,6 +21,15 @@ internal class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        using (var service = app.Services.CreateScope())
+        {
+            //await IdentitySeeding.IdentitySeedingOperation(service.ServiceProvider);
+            URLResolver.Init(service.ServiceProvider.GetRequiredService<IHttpContextAccessor>());
+
+        }
+
+        app.UseStaticFiles();
 
         app.UseHttpsRedirection();
 

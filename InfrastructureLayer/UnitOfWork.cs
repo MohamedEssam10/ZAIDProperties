@@ -14,11 +14,11 @@ namespace InfrastructureLayer
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly TourGuideDbContext DbContext;
+        private readonly PropertyDbContext DbContext;
         private Dictionary<Type, object> Repositories;
 
 
-        public UnitOfWork(TourGuideDbContext DbContext)
+        public UnitOfWork(PropertyDbContext DbContext)
         {
             this.DbContext = DbContext;
             Repositories = new Dictionary<Type, object>();

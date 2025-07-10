@@ -1,5 +1,6 @@
 ﻿using InfrastructureLayer.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace PresentationLayer.Extentions
 {
@@ -8,6 +9,11 @@ namespace PresentationLayer.Extentions
         public static IServiceCollection AddApplicationServices(IServiceCollection Services, IConfiguration Configuration)
         {
 
+            Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
 
             // Add services to the container.
 
@@ -25,7 +31,7 @@ namespace PresentationLayer.Extentions
                                       .AllowAnyHeader());
             });
 
-            Services.AddDbContext<TourGuideDbContext>(options =>
+            Services.AddDbContext<PropertyDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
 
