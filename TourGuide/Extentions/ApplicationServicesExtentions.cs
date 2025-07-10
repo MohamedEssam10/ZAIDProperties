@@ -1,7 +1,9 @@
 ﻿using ApplicationLayer.Contracts.Auth;
 using ApplicationLayer.Contracts.Services;
+using ApplicationLayer.Contracts.UnitToWork;
 using ApplicationLayer.Services;
 using ApplicationLayer.Services.Auth;
+using InfrastructureLayer;
 using InfrastructureLayer.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -85,6 +87,7 @@ namespace PresentationLayer.Extentions
 
             Services.AddScoped<IMessageServices, MessageServices>();
             Services.AddScoped<ITokenService, TokenService>();
+            Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return Services;
         }

@@ -28,7 +28,7 @@ namespace PresentationLayer.Controllers
         [HttpPost]
         public async Task<ActionResult<APIResponse<LoginDTOResponse>>> LogIn(LoginRequestDTO loginRequest)
         {
-            var user = await userManager.GetUserAsync(User);
+            var user = await userManager.FindByEmailAsync(loginRequest.Email);
             var result = await userManager.CheckPasswordAsync(user ,loginRequest.Password);
 
             if (!result)
