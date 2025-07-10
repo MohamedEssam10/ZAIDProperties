@@ -35,9 +35,6 @@ namespace PresentationLayer.Extentions
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
 
-
-
-
             return Services;
         }
     }
