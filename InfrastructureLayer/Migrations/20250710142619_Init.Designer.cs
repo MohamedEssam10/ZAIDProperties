@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfrastructureLayer.Migrations
 {
     [DbContext(typeof(PropertyDbContext))]
-    [Migration("20250710141327_Init")]
+    [Migration("20250710142619_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -85,6 +85,9 @@ namespace InfrastructureLayer.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Area")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");

@@ -16,6 +16,7 @@ namespace DomainLayer.Entities
         public PropertyStatus Status { get; set; }
         public string Location { get; set; } = null!;
         public decimal Price { get; set; }
+        public int Area { get; set; } 
         public List<Images> Images { get; set; } = new List<Images>();
     }
 }
