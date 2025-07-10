@@ -14,7 +14,7 @@ namespace InfrastructureLayer.Repositories
     {
         private readonly DbContext DbContext;
 
-        public GenericRepository(TourGuideDbContext DbContext)
+        public GenericRepository(PropertyDbContext DbContext)
         {
             this.DbContext = DbContext;
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using DomainLayer.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,10 +13,9 @@ using System.Threading.Tasks;
 
 namespace InfrastructureLayer.Data.Context
 {
-    //public class TourGuideDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
-    public class TourGuideDbContext : DbContext
+    public class PropertyDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
-        public TourGuideDbContext(DbContextOptions<TourGuideDbContext> options) : base(options) {}
+        public PropertyDbContext(DbContextOptions<PropertyDbContext> options) : base(options) {}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -44,5 +44,13 @@ namespace InfrastructureLayer.Data.Context
         {
             base.OnConfiguring(optionsBuilder);
         }
+
+        public DbSet<Property> properties { get; set; }
+        public DbSet<Images> images { get; set; }
+        public DbSet<Message> messages { get; set; }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
+
+
+
     }
 }

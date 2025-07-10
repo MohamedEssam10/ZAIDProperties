@@ -14,11 +14,11 @@ namespace InfrastructureLayer
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly TourGuideDbContext DbContext;
+        private readonly PropertyDbContext DbContext;
         private Dictionary<Type, object> Repositories;
 
 
-        public UnitOfWork(TourGuideDbContext DbContext)
+        public UnitOfWork(PropertyDbContext DbContext)
         {
             this.DbContext = DbContext;
             Repositories = new Dictionary<Type, object>();
@@ -28,9 +28,9 @@ namespace InfrastructureLayer
             return await DbContext.Database.BeginTransactionAsync();
         }
 
-        public async Task<int> CompleteAsync()
+        public async Task<bool> CompleteAsync()
         {
-            return await DbContext.SaveChangesAsync();
+            return await DbContext.SaveChangesAsync() > 0;
         }
 
         public IGenericRepository<T> Repository<T>() where T : class
