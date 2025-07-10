@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace InfrastructureLayer.Data.Context
 {
-    public class PropertyDbContext : IdentityDbContext<IdentityUser<int>, IdentityRole<int>, int>
+    public class PropertyDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         public PropertyDbContext(DbContextOptions<PropertyDbContext> options) : base(options) {}
 
@@ -48,6 +48,7 @@ namespace InfrastructureLayer.Data.Context
         public DbSet<Property> properties { get; set; }
         public DbSet<Images> images { get; set; }
         public DbSet<Message> messages { get; set; }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
 
 
