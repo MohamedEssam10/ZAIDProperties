@@ -34,7 +34,6 @@ namespace PresentationLayer.Extentions
             Services.AddDbContext<PropertyDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-
             return Services;
         }
     }
