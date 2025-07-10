@@ -39,7 +39,7 @@ namespace ApplicationLayer.Services
 
             var Pagination = new Pagination<MessageDTOResponse>(Params.PageNumber, Params.PageSize, Count, Messages);
 
-            return APIResponse<Pagination<MessageDTOResponse>>.SuccessResponse(20, Pagination, "Messages Retrived Successfully");
+            return APIResponse<Pagination<MessageDTOResponse>>.SuccessResponse(200, Pagination, "Messages Retrived Successfully");
         }
 
         public async Task<APIResponse<MessageDTOResponse>> GetById(int id)
