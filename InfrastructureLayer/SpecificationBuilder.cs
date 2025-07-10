@@ -1,4 +1,5 @@
 ﻿using ApplicationLayer.Contracts.Specifications;
+using ApplicationLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,14 +27,20 @@ namespace InfrastructureLayer
                 //query = specification.Includes.Aggregate(query, (currentquery, include) => include(currentquery));
             }
 
-            if (specification.OrderByAsec != null)
+            if (specification.orderExpressions != null && specification.orderExpressions.Count > 0)
             {
-                query = query.OrderBy(specification.OrderByAsec);
-            }
+                OrderExpression<T> firstOrderExpression = specification.orderExpressions.First();
 
-            if (specification.OrderByDesc != null)
-            {
-                query = query.OrderByDescending(specification.OrderByDesc);
+                query = firstOrderExpression.IsDescending
+                    ? query.OrderByDescending(firstOrderExpression.KeySelector)
+                    : query.OrderBy(firstOrderExpression.KeySelector);
+
+                foreach (var expression in specification.orderExpressions.Skip(1))
+                {
+                    query = expression.IsDescending
+                        ? ((IOrderedQueryable<T>)query).ThenByDescending(expression.KeySelector)
+                        : ((IOrderedQueryable<T>)query).ThenBy(expression.KeySelector);
+                }
             }
 
             if (specification.IsPaginated)
