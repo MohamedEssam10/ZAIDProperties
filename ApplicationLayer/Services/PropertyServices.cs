@@ -37,6 +37,7 @@ namespace ApplicationLayer.Services
 
             var propertyDTOs = properties.Select(p => new PropertyDTOResponse
             {
+                Id = p.Id,
                 Name = p.Name,
                 Description = p.Description,
                 Type = p.Type,
@@ -44,11 +45,8 @@ namespace ApplicationLayer.Services
                 Location = p.Location,
                 Price = p.Price,
                 Area = p.Area,
-                // Assuming each Property entity has a List<Images> Images property
-                Images = p.Images != null && p.Images.Any()
-                        ? string.Join(",", p.Images.Select(i => URLResolver.BuildFileUrl(i.ImageUrl)))
-                        : null
-            }).ToList();
+                MainImage =URLResolver.BuildFileUrl( p.Images.FirstOrDefault(p => p.IsMainImage).ImageUrl), 
+             }).ToList();
 
 
             return APIResponse<List<PropertyDTOResponse>>.SuccessResponse(
@@ -85,9 +83,8 @@ namespace ApplicationLayer.Services
                 Location = propertyEntity.Location,
                 Price = propertyEntity.Price,
                 Area = propertyEntity.Area,
-                Images = URLResolver.BuildFileUrl(
-                    propertyEntity.Images.FirstOrDefault(img => img.IsMainImage)?.ImageUrl
-                    ?? propertyEntity.Images.FirstOrDefault()?.ImageUrl
+                MainImage = URLResolver.BuildFileUrl(propertyEntity.Images.FirstOrDefault(propertyEntity => propertyEntity.IsMainImage).ImageUrl),
+                Images =(propertyEntity.Images.Where(propertyEntity => !propertyEntity.IsMainImage).Select(propertyEntity => URLResolver.BuildFileUrl( propertyEntity.ImageUrl)).ToList()
                 )
             };
 
@@ -120,15 +117,23 @@ namespace ApplicationLayer.Services
                 Location = propertyDTOAdd.Location,
                 Price = propertyDTOAdd.Price,
                 Area = propertyDTOAdd.Area,
-                Images = new List<Images>
-        {
-            new Images
-            {
-                ImageUrl = URLResolver.BuildFileUrl(propertyDTOAdd.Images.FileName),
-                IsMainImage = true
-            }
-        }
+        
             };
+
+            property.Images.Add(new Images
+            {
+                IsMainImage = true,
+                ImageUrl =await FileHandler.SaveFileAsync("PropertyImages",propertyDTOAdd.MainImage)
+            });
+            foreach(var Image in propertyDTOAdd.Images)
+            {
+                property.Images.Add(new Images
+                {
+                    IsMainImage = false,
+                    ImageUrl=await FileHandler.SaveFileAsync("PropertyImages", Image)
+                });
+                   
+            }
 
             await UnitOfWork.Repository<Property>().AddAsync(property);
             var result = await UnitOfWork.CompleteAsync();
@@ -184,20 +189,24 @@ namespace ApplicationLayer.Services
             existingProperty.Price = propertyDTOUpdate.Price;
             existingProperty.Area = propertyDTOUpdate.Area;
 
+
+
+
+
     
-            if (propertyDTOUpdate.Images != null)
-            {
+            //if (propertyDTOUpdate.Images != null)
+            //{
                 
                 
-                existingProperty.Images.Clear();
-                existingProperty.Images.Add(new Images
-                {
-                    ImageUrl = URLResolver.BuildFileUrl(propertyDTOUpdate.Images.FileName),
-                    IsMainImage = true
-                });
+            //    existingProperty.Images.Clear();
+            //    existingProperty.Images.Add(new Images
+            //    {
+            //        ImageUrl = URLResolver.BuildFileUrl(propertyDTOUpdate.Images.FileName),
+            //        IsMainImage = true
+            //    });
 
             
-            }
+            //}
 
         
             UnitOfWork.Repository<Property>().Update(existingProperty);
@@ -216,6 +225,85 @@ namespace ApplicationLayer.Services
                 propertyDTOUpdate,
                 "Property updated successfully."
             );
+        }
+        public async Task<APIResponse<string>> AddImage(int Id,AddImageDTO addImageDTO )
+        {
+             var IfExisited=await UnitOfWork.Repository<Property>().GetByIdAsync(Id);
+            if (IfExisited is null)
+            {
+                return APIResponse<string>.FailureResponse(
+                    500,
+                    new List<string> { "Failed to Get the property in the database." },
+                    "Failed To Get Property"
+                );
+
+            }
+            if (addImageDTO.MainImage == true && IfExisited.Images.Any(P=>P.IsMainImage))
+            {
+                return APIResponse<string>.FailureResponse(
+                   500,
+                   new List<string> { "Failed to Add the MainImage in the Property there is Already Exicted." },
+                   "Failed To Add the MainImage"
+               ); 
+            }
+            IfExisited.Images.Add(new Images
+            {
+                IsMainImage = addImageDTO.MainImage,
+                ImageUrl = await FileHandler.SaveFileAsync("PropertyImages", addImageDTO.Image)
+
+            });
+
+            UnitOfWork.Repository<Property>().Update(IfExisited); 
+ 
+            var result= await UnitOfWork.CompleteAsync();
+            if (!result)
+            {
+                return APIResponse<string>.FailureResponse(
+                   500,
+                   new List<string> { "Failed to Add the  Image in the Property there is Already Exicted." },
+                   "Failed To Add the Image"
+               );
+            }
+
+
+            return APIResponse<string>.SuccessResponse(201,
+            "Image Added successfully.",
+            "Image Added successfully."
+        );
+
+        }
+
+
+        public async Task<APIResponse<string>> DeleteImage(int Id )
+        {
+            var IfExisited =await UnitOfWork.Repository<Images>().GetByIdAsync(Id);
+            if (IfExisited is null)
+            {
+
+                return APIResponse<string>.FailureResponse(
+                  500,
+                  new List<string> { "Failed to Get the property in the database." },
+                  "Failed To Get Property"
+              );
+            }
+
+            FileHandler.DeleteFile(IfExisited.ImageUrl);
+            UnitOfWork.Repository<Images>().Delete(IfExisited);
+            var result= await UnitOfWork.CompleteAsync();
+            if (!result)
+            {
+                return APIResponse<string>.FailureResponse(
+                 500,
+                 new List<string> { "Failed to Delete the MainImage in the Property there is Already Exicted." },
+                 "Failed To Delete the MainImage"
+             );
+            }
+
+            return APIResponse<string>.SuccessResponse(
+             200,
+             null,
+             "Property deleted successfully."
+         );
         }
 
         public async Task<APIResponse<PropertyDTOResponse>> DeleteProperty(int id)
