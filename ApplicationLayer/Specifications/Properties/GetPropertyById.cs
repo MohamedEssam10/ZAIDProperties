@@ -1,5 +1,6 @@
 ﻿using ApplicationLayer.Models;
 using DomainLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace ApplicationLayer.Specifications.Properties
         public GetPropertyById(int Id)
         {
             Criteria=P=>P.Id==Id;
+            AddInclude(p=>p.Include(i=>i.Images));
         }
     }
 }
