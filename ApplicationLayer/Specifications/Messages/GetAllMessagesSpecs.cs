@@ -12,10 +12,12 @@ namespace ApplicationLayer.Specifications.Messages
 {
     public class GetAllMessagesSpecs : BaseSpecification<Message>
     {
-        public GetAllMessagesSpecs(SpecParams Params)
+        public GetAllMessagesSpecs(MessageSpecParams Params)
         {
             Criteria = M =>
-                (string.IsNullOrEmpty(Params.Search) || M.SenderName.Contains(Params.Search) || M.Body.Contains(Params.Search));
+                ((string.IsNullOrEmpty(Params.Search) || M.SenderName.Contains(Params.Search) || M.Body.Contains(Params.Search))
+                &&
+                (!Params.IsRead.HasValue || M.IsRead == Params.IsRead));
 
             if (Params.Sort is not null && Params.Sort.Count != 0)
             {
