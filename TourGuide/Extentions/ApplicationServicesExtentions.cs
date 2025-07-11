@@ -23,8 +23,6 @@ namespace PresentationLayer.Extentions
                 });
 
             // Add services to the container.
-
-            Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             Services.AddEndpointsApiExplorer();
 

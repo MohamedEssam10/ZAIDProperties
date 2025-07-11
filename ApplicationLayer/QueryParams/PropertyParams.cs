@@ -10,9 +10,6 @@ namespace ApplicationLayer.QueryParams
    public class PropertyParams  
     {
 
-
-        public List<string> Sort = new List<string>() { "isread:asc", "date:desc" };
-
         private int pageNumber = 1;
 
         public int PageNumber
@@ -45,9 +42,5 @@ namespace ApplicationLayer.QueryParams
         public decimal? MaxPrice { get; set; } // Added this property
         public int? MinArea { get; set; }
         public int? MaxArea { get; set; }
-     
-        public decimal Price { get; set; }
-        public int Area { get; set; }
-
     }
 }

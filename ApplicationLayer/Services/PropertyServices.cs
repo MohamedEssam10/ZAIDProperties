@@ -47,9 +47,6 @@ namespace ApplicationLayer.Services
                 Area = p.Area,
                 MainImage = URLResolver.BuildFileUrl(p.Images.FirstOrDefault(i => i.IsMainImage)?.ImageUrl)??" ",
                 Images = null,
-
-
-               
             }).ToList();
 
 
@@ -362,7 +359,12 @@ namespace ApplicationLayer.Services
                     "Delete Failed"
                 );
             }
- 
+
+            foreach (var image in existingProperty.Images)
+            {
+                FileHandler.DeleteFile(image.ImageUrl);
+            }
+
             UnitOfWork.Repository<Property>().Delete(existingProperty);
             var result = await UnitOfWork.CompleteAsync();
 

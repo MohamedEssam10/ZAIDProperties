@@ -23,6 +23,7 @@ namespace ApplicationLayer.Specifications.Properties
                 (!param.MinArea.HasValue || p.Area >= param.MinArea) &&
                 (!param.MaxArea.HasValue || p.Area <= param.MaxArea);
 
+            AddOrderBy(p => Guid.NewGuid());
 
             if (param.PageNumber > 0 && param.PageSize > 0)
             {

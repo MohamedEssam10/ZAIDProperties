@@ -1,10 +1,12 @@
 ﻿using ApplicationLayer.Contracts.Services;
 using ApplicationLayer.Contracts.UnitToWork;
 using ApplicationLayer.DTOs.Message;
+using ApplicationLayer.Hubs;
 using ApplicationLayer.Models;
 using ApplicationLayer.QueryParams;
 using ApplicationLayer.Specifications.Messages;
 using DomainLayer.Entities;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationLayer.Services
@@ -12,13 +14,15 @@ namespace ApplicationLayer.Services
     public class MessageServices : IMessageServices
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IHubContext<NotificationHub> hubContext;
 
-        public MessageServices(IUnitOfWork unitOfWork)
+        public MessageServices(IUnitOfWork unitOfWork, IHubContext<NotificationHub> hubContext)
         {
             this.unitOfWork = unitOfWork;
+            this.hubContext = hubContext;
         }
 
-        public async Task<APIResponse<Pagination<MessageDTOResponse>>> GetAll(SpecParams Params)
+        public async Task<APIResponse<Pagination<MessageDTOResponse>>> GetAll(MessageSpecParams Params)
         {
             var Specs = new GetAllMessagesSpecs(Params);
             var Messages = await unitOfWork.Repository<Message>().GetAllWithSpecification(Specs)
@@ -78,6 +82,9 @@ namespace ApplicationLayer.Services
 
             if (!result)
                 return APIResponse<string>.FailureResponse(500, null, "Failed to add message.");
+
+            await hubContext.Clients.All.SendAsync("ReceiveNotification", message.SenderName , message.Body);
+
             return APIResponse<string>.SuccessResponse(200, null, "Message added successfully.");
         }
 
