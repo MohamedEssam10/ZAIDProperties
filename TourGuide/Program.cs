@@ -1,4 +1,5 @@
 using ApplicationLayer.Helper;
+using ApplicationLayer.Hubs;
 using InfrastructureLayer.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.Extentions;
@@ -12,6 +13,7 @@ internal class Program
         ApplicationServicesExtentions.AddApplicationServices(builder.Services, builder.Configuration);
         IdentityServicesExtention.AddIdentityServices(builder.Services, builder.Configuration);
         builder.Services.AddHttpContextAccessor();
+        builder.Services.AddSignalR();
 
         var app = builder.Build();
         app.UseRouting();
@@ -43,7 +45,8 @@ internal class Program
 
         }
 
-
+        app.MapControllers();
+        app.MapHub<NotificationHub>("/hubs/notifications");
 
         app.UseStaticFiles();
 

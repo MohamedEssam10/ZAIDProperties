@@ -47,9 +47,6 @@ namespace ApplicationLayer.Services
                 Area = p.Area,
                 MainImage = URLResolver.BuildFileUrl(p.Images.FirstOrDefault(i => i.IsMainImage)?.ImageUrl)??" ",
                 Images = null,
-
-
-               
             }).ToList();
 
 
