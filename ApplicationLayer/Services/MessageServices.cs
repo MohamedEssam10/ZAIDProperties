@@ -22,7 +22,7 @@ namespace ApplicationLayer.Services
             this.hubContext = hubContext;
         }
 
-        public async Task<APIResponse<Pagination<MessageDTOResponse>>> GetAll(SpecParams Params)
+        public async Task<APIResponse<Pagination<MessageDTOResponse>>> GetAll(MessageSpecParams Params)
         {
             var Specs = new GetAllMessagesSpecs(Params);
             var Messages = await unitOfWork.Repository<Message>().GetAllWithSpecification(Specs)

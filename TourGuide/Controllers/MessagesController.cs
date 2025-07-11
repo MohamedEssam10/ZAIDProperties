@@ -21,7 +21,7 @@ namespace PresentationLayer.Controllers
 
         [Authorize]
         [HttpGet("GetAllMessages")]
-        public async Task<ActionResult<APIResponse<Pagination<MessageDTOResponse>>>> GetAllMessages([FromQuery] SpecParams Params)
+        public async Task<ActionResult<APIResponse<Pagination<MessageDTOResponse>>>> GetAllMessages([FromQuery] MessageSpecParams Params)
         {
             var response = await messageServices.GetAll(Params);
             return StatusCode(response.StatusCode, response);
