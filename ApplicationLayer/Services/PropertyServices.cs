@@ -359,7 +359,12 @@ namespace ApplicationLayer.Services
                     "Delete Failed"
                 );
             }
- 
+
+            foreach (var image in existingProperty.Images)
+            {
+                FileHandler.DeleteFile(image.ImageUrl);
+            }
+
             UnitOfWork.Repository<Property>().Delete(existingProperty);
             var result = await UnitOfWork.CompleteAsync();
 
