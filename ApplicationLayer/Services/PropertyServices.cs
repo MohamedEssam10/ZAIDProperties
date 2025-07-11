@@ -45,10 +45,8 @@ namespace ApplicationLayer.Services
                 Location = p.Location,
                 Price = p.Price,
                 Area = p.Area,
-                MainImage = URLResolver.BuildFileUrl(
-                        p.Images.FirstOrDefault(i => i.IsMainImage)?.ImageUrl ?? ""
-                    ),
-               // Images = (p.Images.Where(propertyRepo => !propertyRepo.IsMainImage).Select(propertyRepo => URLResolver.BuildFileUrl(propertyRepo.ImageUrl)).ToList())
+                MainImage = URLResolver.BuildFileUrl(p.Images.FirstOrDefault(i => i.IsMainImage)?.ImageUrl)??" ",
+                Images = null,
 
 
                
