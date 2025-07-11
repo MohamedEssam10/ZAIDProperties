@@ -45,8 +45,14 @@ namespace ApplicationLayer.Services
                 Location = p.Location,
                 Price = p.Price,
                 Area = p.Area,
-                MainImage =URLResolver.BuildFileUrl( p.Images.FirstOrDefault(p => p.IsMainImage).ImageUrl), 
-             }).ToList();
+                MainImage = URLResolver.BuildFileUrl(
+                        p.Images.FirstOrDefault(i => i.IsMainImage)?.ImageUrl ?? ""
+                    ),
+               // Images = (p.Images.Where(propertyRepo => !propertyRepo.IsMainImage).Select(propertyRepo => URLResolver.BuildFileUrl(propertyRepo.ImageUrl)).ToList())
+
+
+               
+            }).ToList();
 
 
             return APIResponse<List<PropertyDTOResponse>>.SuccessResponse(
@@ -72,7 +78,22 @@ namespace ApplicationLayer.Services
                 );
             }
 
-         
+
+            //var dto = new PropertyDTOResponse
+            //{
+            //    Id = propertyEntity.Id,
+            //    Name = propertyEntity.Name,
+            //    Description = propertyEntity.Description,
+            //    Type = propertyEntity.Type,
+            //    Status = propertyEntity.Status,
+            //    Location = propertyEntity.Location,
+            //    Price = propertyEntity.Price,
+            //    Area = propertyEntity.Area,
+            //    MainImage = URLResolver.BuildFileUrl(propertyEntity.Images.FirstOrDefault(propertyEntity => propertyEntity.IsMainImage).ImageUrl),
+      //  Images =(propertyEntity.Images.Where(propertyEntity => !propertyEntity.IsMainImage).Select(propertyEntity => URLResolver.BuildFileUrl( propertyEntity.ImageUrl)).ToList()
+            //    )
+            //};
+
             var dto = new PropertyDTOResponse
             {
                 Id = propertyEntity.Id,
@@ -83,9 +104,13 @@ namespace ApplicationLayer.Services
                 Location = propertyEntity.Location,
                 Price = propertyEntity.Price,
                 Area = propertyEntity.Area,
-                MainImage = URLResolver.BuildFileUrl(propertyEntity.Images.FirstOrDefault(propertyEntity => propertyEntity.IsMainImage).ImageUrl),
-                Images =(propertyEntity.Images.Where(propertyEntity => !propertyEntity.IsMainImage).Select(propertyEntity => URLResolver.BuildFileUrl( propertyEntity.ImageUrl)).ToList()
-                )
+                MainImage = URLResolver.BuildFileUrl(
+        propertyEntity.Images?.FirstOrDefault(i => i.IsMainImage)?.ImageUrl ?? ""
+    ),
+                Images = propertyEntity.Images?
+        .Where(i => !i.IsMainImage)
+        .Select(i => URLResolver.BuildFileUrl(i.ImageUrl))
+        .ToList() ?? new List<string>()
             };
 
             return APIResponse<PropertyDTOResponse>.SuccessResponse(200, dto, "Property Retrieved Successfully");

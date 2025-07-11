@@ -1,6 +1,7 @@
 ﻿using ApplicationLayer.Models;
 using ApplicationLayer.QueryParams;
 using DomainLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,8 @@ namespace ApplicationLayer.Specifications.Properties
             {
                 ApplyPagination((param.PageNumber - 1) * param.PageSize, param.PageSize);
             }
+
+            AddInclude(p => p.Include(i => i.Images));
 
         }
     }
