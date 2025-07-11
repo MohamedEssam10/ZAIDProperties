@@ -29,7 +29,7 @@ namespace ApplicationLayer.Specifications.Properties
                 ApplyPagination((param.PageNumber - 1) * param.PageSize, param.PageSize);
             }
 
-            AddInclude(p => p.Include(i => i.Images));
+            AddInclude(p => p.Include(i => i.Images.Where(i=>i.IsMainImage)));
 
         }
     }
