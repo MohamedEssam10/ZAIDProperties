@@ -18,7 +18,7 @@ namespace ApplicationLayer.DTOs.Property
         public string Location { get; set; } = null!;
         public decimal Price { get; set; }
         public int Area { get; set; }
-        public List<string?> Images { get; set; } = new List<string?>();
+        public List<string>? Images { get; set; } = new List<string>();
 
         public string MainImage { get; set; }
 
