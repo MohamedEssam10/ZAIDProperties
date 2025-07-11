@@ -17,30 +17,29 @@ internal class Program
         builder.Services.AddSignalR();
 
 
+        // 1) In Program.cs, configure DI
         builder.Services.AddRateLimiter(options =>
         {
-            options.AddPolicy("ApiPolicy", httpContext =>
+            // Partition by IP for *all* requests
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
             {
-                // 1) Extract the client’s IP address (or use "unknown" if null)
-                var clientIp = httpContext.Connection.RemoteIpAddress?.ToString()
-                               ?? "unknown";
-
-                // 2) Use the Token-Bucket factory, keyed by that IP
+                var clientIp = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
                 return RateLimitPartition.GetTokenBucketLimiter(
                     partitionKey: clientIp,
                     factory: _ => new TokenBucketRateLimiterOptions
                     {
-                        TokenLimit = 20,                             // burst size
+                        TokenLimit = 20,                     // max burst
                         QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                        QueueLimit = 0,                              // no queuing
-                        ReplenishmentPeriod = TimeSpan.FromMinutes(1),        // refill interval
-                        TokensPerPeriod = 20,                             // tokens added per interval
+                        QueueLimit = 0,                      // no queueing
+                        ReplenishmentPeriod = TimeSpan.FromMinutes(1),
+                        TokensPerPeriod = 20,                // refill
                         AutoReplenishment = true
                     });
             });
+
+            // Optional: override the default 429 status if you like
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
         });
-
-
 
 
 
@@ -77,8 +76,9 @@ internal class Program
         app.UseCors("AllowAllOrigins");
 
         app.UseRateLimiter();
-        app.MapGet("/api/data", () => "hello")
-           .RequireRateLimiting("ApiPolicy");
+
+        var api = app.MapGroup("/api")
+             .RequireRateLimiting("ApiPolicy");
 
         app.MapControllers();
         app.MapHub<NotificationHub>("/hubs/notifications");
