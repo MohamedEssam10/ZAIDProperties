@@ -88,6 +88,7 @@ namespace PresentationLayer.Extentions
             Services.AddScoped<IMessageServices, MessageServices>();
             Services.AddScoped<ITokenService, TokenService>();
             Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            Services.AddScoped<IPropertyServices, PropertyServices>();
 
             return Services;
         }
