@@ -10,9 +10,6 @@ namespace ApplicationLayer.QueryParams
    public class PropertyParams  
     {
 
-
-        public List<string> Sort = new List<string>() { "isread:asc", "date:desc" };
-
         private int pageNumber = 1;
 
         public int PageNumber
