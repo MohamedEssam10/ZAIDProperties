@@ -253,7 +253,12 @@ namespace ApplicationLayer.Services
         }
         public async Task<APIResponse<string>> AddImage(int Id,AddImageDTO addImageDTO )
         {
-             var IfExisited=await UnitOfWork.Repository<Property>().GetByIdAsync(Id);
+            var Specs = new GetPropertyById(Id);
+            var IfExisited = await UnitOfWork.Repository<Property>()
+                .GetAllWithSpecification(Specs)
+                .FirstOrDefaultAsync();
+
+           
             if (IfExisited is null)
             {
                 return APIResponse<string>.FailureResponse(
@@ -265,11 +270,20 @@ namespace ApplicationLayer.Services
             }
             if (addImageDTO.MainImage == true && IfExisited.Images.Any(P=>P.IsMainImage))
             {
-                return APIResponse<string>.FailureResponse(
+                var mainImage = IfExisited.Images.FirstOrDefault(i => i.IsMainImage);
+
+                if (mainImage is null)
+                {
+                    return APIResponse<string>.FailureResponse(
                    500,
-                   new List<string> { "Failed to Add the MainImage in the Property there is Already Exicted." },
-                   "Failed To Add the MainImage"
-               ); 
+                   new List<string> { "Failed to Add the  Image in the Property there is Already Exicted." },
+                   "Failed To Add the Image"
+                    );
+                }
+                FileHandler.DeleteFile(mainImage.ImageUrl);
+                UnitOfWork.Repository<Images>().Delete(mainImage);
+               await UnitOfWork.CompleteAsync();
+                
             }
             IfExisited.Images.Add(new Images
             {
