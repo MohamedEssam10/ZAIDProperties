@@ -20,6 +20,10 @@ namespace ApplicationLayer.Contracts.Services
 
          Task<APIResponse<PropertyDTOResponse>> DeleteProperty(int Id);
 
+        Task<APIResponse<string>> AddImage(int Id, AddImageDTO addImageDTO);
+
+        Task<APIResponse<string>> DeleteImage(int Id);
+
 
     }
 }

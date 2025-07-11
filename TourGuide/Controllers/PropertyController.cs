@@ -44,6 +44,27 @@ namespace PresentationLayer.Controllers
         }
 
 
+        [HttpPost("AddImage/{id}")]
+        public async Task<ActionResult<APIResponse<string>>> AddImage([FromRoute] int id, [FromForm] AddImageDTO addImageDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                var error = ModelState.Values.SelectMany(e => e.Errors).Select(e => e.ErrorMessage).ToList();
+                return APIResponse<string>.FailureResponse(
+                                    500,
+                                   error,
+                                    "Failed To Add Image"
+                                                           );
+            
+
+            }
+            var result = await PropertyServices.AddImage(id, addImageDTO);
+            return StatusCode(result.StatusCode, result);
+
+        }
+
+        
+
         [HttpPut("UpdateProperty/{Id}")]
         public async Task<ActionResult<APIResponse<PropertyDTOUpdate>>> UpdateProperty([FromForm] PropertyDTOUpdate propertyDTOUpdate)
         {
@@ -52,6 +73,7 @@ namespace PresentationLayer.Controllers
             return StatusCode(response.StatusCode, response);
 
         }
+
 
         [HttpDelete("DeleteProperty/{Id}")]
         public async Task<ActionResult<APIResponse<PropertyDTOResponse>>> DeleteProperty(int Id)
@@ -63,6 +85,15 @@ namespace PresentationLayer.Controllers
 
         }
 
+        [HttpDelete("DeleteImage/{Id}")]
+
+        public async Task<ActionResult<APIResponse<string>>> DeleteImage([FromRoute] int Id)
+        {
+            var response = await PropertyServices.DeleteImage(Id);
+            if (!response.Succeeded)
+                return StatusCode(response.StatusCode, response);
+            return Ok(response);
+        }
 
 
     }

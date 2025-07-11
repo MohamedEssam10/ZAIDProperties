@@ -14,8 +14,22 @@ internal class Program
         builder.Services.AddHttpContextAccessor();
 
         var app = builder.Build();
+        app.UseRouting();
 
         // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment() || app.Environment.IsStaging() || app.Environment.IsProduction())
+        {
+            app.UseDeveloperExceptionPage();
+
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ZAID PROPERTY API v1");
+                c.RoutePrefix = string.Empty;
+            });
+        }
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -28,6 +42,8 @@ internal class Program
             URLResolver.Init(service.ServiceProvider.GetRequiredService<IHttpContextAccessor>());
 
         }
+
+
 
         app.UseStaticFiles();
 
