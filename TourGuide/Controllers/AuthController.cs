@@ -100,7 +100,9 @@ namespace PresentationLayer.Controllers
             var cookiewOptions = new CookieOptions()
             {
                 HttpOnly = true,
-                Expires = ExpiresOn.ToLocalTime()
+                Expires = ExpiresOn.ToLocalTime(),
+                SameSite = SameSiteMode.None,
+                Secure = true
             };
 
             Response.Cookies.Append("RefreshToken", refreshToken, cookiewOptions);

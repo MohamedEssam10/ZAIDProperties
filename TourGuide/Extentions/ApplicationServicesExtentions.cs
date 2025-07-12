@@ -75,9 +75,10 @@ namespace PresentationLayer.Extentions
             Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAllOrigins",
-                    builder => builder.AllowAnyOrigin()
+                    builder => builder.WithOrigins("http://127.0.0.1:5500")
                                       .AllowAnyMethod()
-                                      .AllowAnyHeader());
+                                      .AllowAnyHeader()
+                                      .AllowCredentials());
             });
 
             Services.AddDbContext<PropertyDbContext>(options =>
