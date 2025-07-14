@@ -103,7 +103,9 @@ namespace PresentationLayer.Controllers
                 Expires = ExpiresOn.ToLocalTime(),
                 SameSite = SameSiteMode.None,
                 Secure = true,
-                Path = "/" 
+                Path = "/" ,
+               
+
             };
 
             Response.Cookies.Append("RefreshToken", refreshToken, cookiewOptions);

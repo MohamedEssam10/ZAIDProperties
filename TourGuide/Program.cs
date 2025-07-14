@@ -43,7 +43,11 @@ internal class Program
 
 
 
+        builder.Services.AddReverseProxy()
+      .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+
         var app = builder.Build();
+       
         app.UseRouting();
 
         // Configure the HTTP request pipeline.
@@ -84,6 +88,7 @@ internal class Program
         app.MapHub<NotificationHub>("/hubs/notifications");
 
         app.UseStaticFiles();
+        app.MapReverseProxy();
 
         app.UseHttpsRedirection();
 
