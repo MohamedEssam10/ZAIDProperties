@@ -4,6 +4,9 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <EnableSdkContainerDebugging>True</EnableSdkContainerDebugging>
+    <ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:8.0</ContainerBaseImage>
+    <UserSecretsId>81d189dd-2f9d-49f2-8c47-4f1987df8a78</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +25,10 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\PropertyImages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ContainerPort Include="8081" />
   </ItemGroup>
 
 </Project>
