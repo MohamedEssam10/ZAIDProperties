@@ -15,13 +15,17 @@ namespace ApplicationLayer.Specifications.Properties
         public GetAllPropertySpecs(PropertyParams param)
         {
             Criteria = p =>
-                (!param.Type.HasValue || p.Type == param.Type) &&
-                (!param.Status.HasValue || p.Status == param.Status) &&
-                (string.IsNullOrEmpty(param.Location) || p.Location.Contains(param.Location)) &&
-                (!param.MinPrice.HasValue || p.Price >= param.MinPrice) &&
-                 (!param.MaxPrice.HasValue || p.Price <= param.MaxPrice) &&
-                (!param.MinArea.HasValue || p.Area >= param.MinArea) &&
-                (!param.MaxArea.HasValue || p.Area <= param.MaxArea);
+     (!param.Type.HasValue || p.Type == param.Type) &&
+     (!param.Status.HasValue || p.Status == param.Status) &&
+     (string.IsNullOrEmpty(param.Location) || p.Location.Contains(param.Location)) &&
+     (!param.MinPrice.HasValue || p.Price >= param.MinPrice) &&
+     (!param.MaxPrice.HasValue || p.Price <= param.MaxPrice) &&
+     (!param.MinArea.HasValue || p.Area >= param.MinArea) &&
+     (!param.MaxArea.HasValue || p.Area <= param.MaxArea) &&
+     (string.IsNullOrEmpty(param.Search) ||
+         (EF.Functions.Like(p.Name.ToLower(), $"%{param.Search}%") ||
+          EF.Functions.Like(p.Description.ToLower(), $"%{param.Search}%") ||
+          EF.Functions.Like(p.Location.ToLower(), $"%{param.Search}%")));
 
 
 
