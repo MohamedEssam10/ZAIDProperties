@@ -42,5 +42,6 @@ namespace ApplicationLayer.QueryParams
         public decimal? MaxPrice { get; set; } // Added this property
         public int? MinArea { get; set; }
         public int? MaxArea { get; set; }
+       
     }
 }

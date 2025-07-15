@@ -19,9 +19,12 @@ namespace ApplicationLayer.Specifications.Properties
                 (!param.Status.HasValue || p.Status == param.Status) &&
                 (string.IsNullOrEmpty(param.Location) || p.Location.Contains(param.Location)) &&
                 (!param.MinPrice.HasValue || p.Price >= param.MinPrice) &&
-                (!param.MaxPrice.HasValue || p.Price <= param.MaxPrice) &&
+                 (!param.MaxPrice.HasValue || p.Price <= param.MaxPrice) &&
                 (!param.MinArea.HasValue || p.Area >= param.MinArea) &&
                 (!param.MaxArea.HasValue || p.Area <= param.MaxArea);
+
+
+
 
             AddOrderBy(p => Guid.NewGuid());
 
