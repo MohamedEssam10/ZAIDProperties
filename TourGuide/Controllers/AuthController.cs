@@ -65,7 +65,7 @@ namespace PresentationLayer.Controllers
 
             if (string.IsNullOrEmpty(refreshToken))
             {
-                return  StatusCode(401 ,APIResponse<LoginDTOResponse>.FailureResponse(401, null, "Log in and try again."));
+                return  StatusCode(401 ,APIResponse<LoginDTOResponse>.FailureResponse(401, new List<string> {"Null token"}, "Log in and try again."));
             }
 
             //var user = userManager.Users.FirstOrDefault(U => U.RefreshTokens.Any(T => T.IsActive && T.Token == refreshToken));
@@ -102,7 +102,10 @@ namespace PresentationLayer.Controllers
                 HttpOnly = true,
                 Expires = ExpiresOn.ToLocalTime(),
                 SameSite = SameSiteMode.None,
-                Secure = true
+                Secure = true,
+                Path = "/" ,
+               
+
             };
 
             Response.Cookies.Append("RefreshToken", refreshToken, cookiewOptions);

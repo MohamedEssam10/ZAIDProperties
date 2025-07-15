@@ -9,6 +9,7 @@ namespace ApplicationLayer.QueryParams
 {
    public class PropertyParams  
     {
+        public List<string>? Sort { get; set; } = null;
 
         private int pageNumber = 1;
 
