@@ -10,6 +10,6 @@ namespace ApplicationLayer.QueryParams
     {
         public List<string> Sort { get; set; } = new List<string>() { "isread:asc", "date:desc" };
 
-        public bool? IsRead { get; set; } = false;
+        public bool? IsRead { get; set; }
     }
 }
