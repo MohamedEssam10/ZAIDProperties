@@ -27,10 +27,39 @@ namespace ApplicationLayer.Specifications.Properties
           EF.Functions.Like(p.Description.ToLower(), $"%{param.Search}%") ||
           EF.Functions.Like(p.Location.ToLower(), $"%{param.Search}%")));
 
+            if(param.Sort is not null)
+            {
+                foreach(var sortype in param.Sort)
+                {
 
+                    if(sortype == "price:asc")
+                    {
+                        AddOrderBy(p => p.Price);
+                    }
 
+                    if(sortype == "price:desc")
+                    {
+                        AddOrderBy(p => p.Price,true);
+                    }
 
-            AddOrderBy(p => Guid.NewGuid());
+                    if(sortype== "area:desc")
+                    {
+                        AddOrderBy(p => p.Area, true);
+                    }
+
+                    if (sortype == "area:asc")
+                    {
+                        AddOrderBy(p => p.Area);
+                    }
+
+                }
+            }
+
+            else
+            {
+                AddOrderBy(p => Guid.NewGuid());
+            }
+               
 
             if (param.PageNumber > 0 && param.PageSize > 0)
             {

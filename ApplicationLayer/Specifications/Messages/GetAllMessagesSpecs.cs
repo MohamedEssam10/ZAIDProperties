@@ -32,10 +32,10 @@ namespace ApplicationLayer.Specifications.Messages
                             AddOrderBy(M => M.IsRead, true);
                             break;
                         case "date:asc":
-                            AddOrderBy(M => M.IsRead);
+                            AddOrderBy(M => M.CreatedAt);
                             break;
                         case "date:desc":
-                            AddOrderBy(M => M.IsRead, true);
+                            AddOrderBy(M => M.CreatedAt, true);
                             break;
                         default:
                             break;

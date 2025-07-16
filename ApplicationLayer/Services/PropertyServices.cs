@@ -45,7 +45,12 @@ namespace ApplicationLayer.Services
                 Location = p.Location,
                 Price = p.Price,
                 Area = p.Area,
-                MainImage = URLResolver.BuildFileUrl(p.Images.FirstOrDefault(i => i.IsMainImage)?.ImageUrl)??" ",
+                MainImage =p.Images.Where(im=>im.IsMainImage).Select(im=> new ImageResponse() {
+                
+                Id = im.Id,
+                ImageURL = URLResolver.BuildFileUrl(im.ImageUrl) ?? "No Photo"
+                
+                }).FirstOrDefault() ,
                 Images = null,
             }).ToList();
 
@@ -99,13 +104,23 @@ namespace ApplicationLayer.Services
                 Location = propertyEntity.Location,
                 Price = propertyEntity.Price,
                 Area = propertyEntity.Area,
-                MainImage = URLResolver.BuildFileUrl(
-        propertyEntity.Images?.FirstOrDefault(i => i.IsMainImage)?.ImageUrl ?? ""
-    ),
-                Images = propertyEntity.Images?
-        .Where(i => !i.IsMainImage)
-        .Select(i => URLResolver.BuildFileUrl(i.ImageUrl))
-        .ToList() ?? new List<string>()
+                MainImage = propertyEntity.Images.Where(im => im.IsMainImage).Select(im => new ImageResponse()
+                {
+
+                    Id = im.Id,
+                    ImageURL = URLResolver.BuildFileUrl(im.ImageUrl) ?? "No Photo"
+
+                }).FirstOrDefault(),
+
+
+
+                Images = propertyEntity.Images.Where(im => !im.IsMainImage).Select(im => new ImageResponse()
+                {
+
+                    Id = im.Id,
+                    ImageURL = URLResolver.BuildFileUrl(im.ImageUrl) ?? "No Photo"
+
+                }).ToList()
             };
 
             return APIResponse<PropertyDTOResponse>.SuccessResponse(200, dto, "Property Retrieved Successfully");
