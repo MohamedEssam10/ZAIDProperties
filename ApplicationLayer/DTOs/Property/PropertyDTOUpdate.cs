@@ -18,8 +18,6 @@ namespace ApplicationLayer.DTOs.Property
         public string Location { get; set; } = null!;
         public decimal Price { get; set; }
         public int Area { get; set; }
-        public List<IFormFile> Images { get; set; } = null!;
-
-        public IFormFile MainImage { get; set; }
+       
     }
 }
