@@ -39,7 +39,7 @@ namespace ApplicationLayer.Services
                 .ToListAsync();
 
             var CountSpecs = new CountAllMessagesSpecs(Params);
-            var Count = await unitOfWork.Repository<Message>().GetCountWithSpecs(Specs);
+            var Count = await unitOfWork.Repository<Message>().GetCountWithSpecs(CountSpecs);
 
             var Pagination = new Pagination<MessageDTOResponse>(Params.PageNumber, Params.PageSize, Count, Messages);
 
