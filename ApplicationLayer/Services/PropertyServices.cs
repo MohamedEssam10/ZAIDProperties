@@ -24,7 +24,7 @@ namespace ApplicationLayer.Services
         {
             UnitOfWork = unitOfWork;
         }
-
+         
 
         public async Task<APIResponse<List<PropertyDTOResponse>>> GetAll(PropertyParams Params)
         {
