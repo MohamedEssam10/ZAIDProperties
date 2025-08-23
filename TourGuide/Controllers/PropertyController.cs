@@ -95,8 +95,10 @@ namespace PresentationLayer.Controllers
             return Ok(response);
         }
 
-
+        [HttpGet("CountProperties")]
+        public async Task<ActionResult<int>> PropertiesCount()
+        {
+            return Ok(await PropertyServices.GetCount());
+        }
     }
-
- 
 }

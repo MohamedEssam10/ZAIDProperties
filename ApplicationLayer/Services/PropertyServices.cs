@@ -399,6 +399,10 @@ namespace ApplicationLayer.Services
             );
         }
 
+        public async Task<int> GetCount()
+        {
+            return await UnitOfWork.Repository<Property>().GetAll().CountAsync();
+        }
     }
 }
  

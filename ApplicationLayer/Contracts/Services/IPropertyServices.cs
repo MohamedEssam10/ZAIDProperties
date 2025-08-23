@@ -24,6 +24,8 @@ namespace ApplicationLayer.Contracts.Services
 
         Task<APIResponse<string>> DeleteImage(int Id);
 
+        Task<int> GetCount();
+
 
     }
 }
