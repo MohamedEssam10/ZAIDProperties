@@ -1,13 +1,14 @@
 using ApplicationLayer.Helper;
 using ApplicationLayer.Hubs;
 using InfrastructureLayer.Data.Context;
+using InfrastructureLayer.Data.Seeding;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.Extentions;
 using System.Threading.RateLimiting;
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -72,7 +73,7 @@ internal class Program
 
         using (var service = app.Services.CreateScope())
         {
-            //await IdentitySeeding.IdentitySeedingOperation(service.ServiceProvider);
+            await IdentitySeeding.IdentitySeedingOperation(service.ServiceProvider);
             URLResolver.Init(service.ServiceProvider.GetRequiredService<IHttpContextAccessor>());
 
         }

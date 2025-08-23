@@ -75,7 +75,7 @@ namespace PresentationLayer.Extentions
             Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAllOrigins",
-                    builder => builder.WithOrigins("https://zaid-project-viconisems-projects.vercel.app")
+                    builder => builder.WithOrigins("https://shedwan-properties.vercel.app/")
                                       .AllowAnyMethod()
                                       .AllowAnyHeader()
                                       .AllowCredentials());
